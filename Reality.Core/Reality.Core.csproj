@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AWS\AWS.EmailService\AWS.EmailService.csproj" />
     <ProjectReference Include="..\Reality.Lib.Core\Reality.Lib.Core.csproj" />
     <ProjectReference Include="..\Reality.Lib.Standard\Reality.Lib.Standard.csproj" />
   </ItemGroup>

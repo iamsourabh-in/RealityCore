@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AWS.EmailService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -18,6 +19,7 @@ namespace Reality.Core
         {
 
             services.AddSingleton<ITestService, TestService>();
+            services.AddSingleton<IAmazonSES, AmazonSES>();
             services.AddScoped<FactoryActivatedMiddleware>();
             services.AddRouting();
         }
@@ -74,17 +76,9 @@ namespace Reality.Core
             */
             app.Use(async (context, next) =>
             {
-                var testService = context.RequestServices.GetRequiredService<ITestService>();
-                var username = context.Request.Query["username"].ToString();
-                if (!String.IsNullOrEmpty(username))
-                {
+                var sesService = context.RequestServices.GetRequiredService<IAmazonSES>();
 
-                    await context.Response.WriteAsync("Hello From Inline Conventional Way (Intermidiate) pipe: Pipe has query string : username -> " + testService.GreetUser(username) + '\n');
-                }
-                else
-                {
-                    await context.Response.WriteAsync("Hello From Inline Conventional Way (Intermidiate) pipe \n");
-                }
+                sesService.SendCustomEmail();
 
                 await next();
             });
@@ -149,6 +143,8 @@ namespace Reality.Core
             #endregion
 
             #region Learn Routing 
+
+
             app.Map("/foo", (appbuilder) =>
             {
                 appbuilder.Run(async (context) =>
@@ -157,12 +153,35 @@ namespace Reality.Core
                 });
             });
 
-            var routeHandler = new RouteHandler(context =>
+            #region Inline way
+
+            RequestDelegate factorialRequestHandler = c =>
+            {
+                var number = c.GetRouteValue("number") as string;
+
+                int value;
+                if (Int32.TryParse(number, out value))
+                {
+                    value = Math.Abs(value);
+                    var results = value;
+                    return c.Response.WriteAsync($"{number}! = {results}");
+                }
+
+                return c.Response.WriteAsync("${number} is not an integer.");
+            };
+            app.UseRouter(rBuilder =>
+            {
+                rBuilder.MapGet("/hoo", factorialRequestHandler);
+            });
+
+            #endregion
+
+            var defaultHandler = new RouteHandler(context =>
             {
                 var routeValues = context.GetRouteData().Values;
                 return context.Response.WriteAsync($"Hello! Route values: {string.Join(", ", routeValues)}");
             });
-            var routeBuilder = new RouteBuilder(app, routeHandler);
+            var routeBuilder = new RouteBuilder(app, defaultHandler);
 
             routeBuilder.MapRoute("Track Package Route", "package/{name}");
 
@@ -171,7 +190,9 @@ namespace Reality.Core
                 var name = context.GetRouteValue("name");
                 return context.Response.WriteAsync($"Hi, {name}!");
             });
+
             var routes = routeBuilder.Build();
+
             app.UseRouter(routes);
 
             #endregion

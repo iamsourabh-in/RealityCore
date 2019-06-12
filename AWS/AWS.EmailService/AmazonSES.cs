@@ -3,6 +3,7 @@ using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AWS.EmailService
 {
@@ -10,11 +11,11 @@ namespace AWS.EmailService
     {
         // Replace sender@example.com with your "From" address.
         // This address must be verified with Amazon SES.
-        static readonly string senderAddress = "sourabh.rustagi@daffodilsw.com";
+        static readonly string senderAddress = "rohit.rustagi@daffodilsw.com";
 
         // Replace recipient@example.com with a "To" address. If your account
         // is still in the sandbox, this address must be verified.
-        static readonly string receiverAddress = "saurabh.gupta@daffodilsw.com";
+        static readonly string receiverAddress = "sourabh.rustagi@daffodilsw.com";
 
         // The configuration set to use for this email. If you do not want to use a
         // configuration set, comment out the following property and the
@@ -22,15 +23,15 @@ namespace AWS.EmailService
         static readonly string configSet = "TestConfig";
 
         // The subject line for the email.
-        static readonly string subject = "Amazon SES test (AWS SDK for .NET)";
+        static readonly string Subject = "Amazon SES test (AWS SDK for .NET)";
 
         // The email body for recipients with non-HTML email clients.
-        static readonly string textBody = "Amazon SES Test (.NET)\r\n"
+        static readonly string TextBody = "Amazon SES Test (.NET)\r\n"
                                         + "This email was sent through Amazon SES "
                                         + "using the AWS SDK for .NET.";
 
         // The HTML body of the email.
-        static readonly string htmlBody = @"<html>
+        static readonly string HtmlBody = @"<html>
                                             <head></head>
                                             <body>
                                               <h1>Amazon SES Test (AWS SDK for .NET)</h1>
@@ -43,7 +44,7 @@ namespace AWS.EmailService
 
 
 
-        public void SendCustomEmail()
+        public async Task SendEmailAsync(string subject, string htmlBody, string textBody)
         {
             // Replace USWest2 with the AWS Region you're using for Amazon SES.
             // Acceptable values are EUWest1, USEast1, and USWest2.
@@ -76,12 +77,12 @@ namespace AWS.EmailService
                     },
                     // If you are not using a configuration set, comment
                     // or remove the following line 
-                    ConfigurationSetName = configSet
+                    //ConfigurationSetName = configSet
                 };
                 try
                 {
                     Console.WriteLine("Sending email using Amazon SES...");
-                    var response = client.SendEmailAsync(sendRequest);
+                    var response = await client.SendEmailAsync(sendRequest);
                     Console.WriteLine("The email was sent successfully.");
                 }
                 catch (Exception ex)

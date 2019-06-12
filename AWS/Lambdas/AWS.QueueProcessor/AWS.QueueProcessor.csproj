@@ -9,4 +9,10 @@
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.4.0" />
     <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AWS.EmailService\AWS.EmailService.csproj" />
+    <ProjectReference Include="..\..\AWS.Queue.Standard\AWS.Queue.Standard.csproj" />
+    <ProjectReference Include="..\..\Core\AWS.Lambda.CoreServices\AWS.Lambda.CoreServices.csproj" />
+    <ProjectReference Include="..\..\Core\AWS.Lambda.DI\AWS.Lambda.DI.csproj" />
+  </ItemGroup>
 </Project>

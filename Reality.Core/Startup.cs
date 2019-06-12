@@ -78,7 +78,7 @@ namespace Reality.Core
             {
                 var sesService = context.RequestServices.GetRequiredService<IAmazonSES>();
 
-                sesService.SendCustomEmail();
+                // sesService.SendCustomEmail();
 
                 await next();
             });

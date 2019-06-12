@@ -2,7 +2,6 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Reality.CLI
@@ -23,9 +22,14 @@ namespace Reality.CLI
 
         static async Task ReadObjectDataAsync()
         {
-            string responseBody = "";
             try
             {
+
+                //AmazonSES ses = new AmazonSES();
+                //ses.SendEmailAsync("body", "", "").Wait();
+
+
+
                 var putRequest1 = new PutObjectRequest
                 {
                     BucketName = bucketName,
@@ -35,23 +39,28 @@ namespace Reality.CLI
 
                 PutObjectResponse response1 = await client.PutObjectAsync(putRequest1);
 
-                // GET
-                GetObjectRequest request = new GetObjectRequest
-                {
-                    BucketName = bucketName,
-                    Key = keyName
-                };
-                using (GetObjectResponse response = await client.GetObjectAsync(request))
-                using (Stream responseStream = response.ResponseStream)
-                using (StreamReader reader = new StreamReader(responseStream))
-                {
-                    string title = response.Metadata["x-amz-meta-title"]; // Assume you have "title" as medata added to the object.
-                    string contentType = response.Headers["Content-Type"];
-                    Console.WriteLine("Object metadata, Title: {0}", title);
-                    Console.WriteLine("Content type: {0}", contentType);
 
-                    responseBody = reader.ReadToEnd(); // Now you process the response body.
-                }
+
+
+
+
+                // GET
+                //GetObjectRequest request = new GetObjectRequest
+                //{
+                //    BucketName = bucketName,
+                //    Key = keyName
+                //};
+                //using (GetObjectResponse response = await client.GetObjectAsync(request))
+                //using (Stream responseStream = response.ResponseStream)
+                //using (StreamReader reader = new StreamReader(responseStream))
+                //{
+                //    string title = response.Metadata["x-amz-meta-title"]; // Assume you have "title" as medata added to the object.
+                //    string contentType = response.Headers["Content-Type"];
+                //    Console.WriteLine("Object metadata, Title: {0}", title);
+                //    Console.WriteLine("Content type: {0}", contentType);
+
+                //    responseBody = reader.ReadToEnd(); // Now you process the response body.
+                //}
             }
             catch (AmazonS3Exception e)
             {

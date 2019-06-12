@@ -9,4 +9,8 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.102.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AWS\AWS.EmailService\AWS.EmailService.csproj" />
+  </ItemGroup>
+
 </Project>

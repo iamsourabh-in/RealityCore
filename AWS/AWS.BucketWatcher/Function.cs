@@ -2,9 +2,9 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.S3Events;
 using Amazon.S3;
 using Amazon.SQS;
-using Amazon.SQS.Model;
 using AWS.Lambda.CoreServices;
 using AWS.Lambda.DI;
+using AWS.Queue.Standard;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -17,6 +17,8 @@ namespace AWS.BucketWatcher
     public class Function
     {
         private readonly ILogService _loggingService;
+
+        private readonly IStandardQueueService _standardQueue;
         IAmazonS3 S3Client { get; set; }
         AmazonSQSClient sqsClient { get; set; }
 
@@ -31,12 +33,9 @@ namespace AWS.BucketWatcher
 
             AmazonSQSConfig sqsConfig = new AmazonSQSConfig();
             sqsClient = new AmazonSQSClient();
-
-            // Get dependency resolver
             DependencyResolver resolver = new DependencyResolver(ConfigureServices);
-            // create instances of services using DI resolver
             _loggingService = resolver.ServiceProvider.GetRequiredService<ILogService>();
-           
+            _standardQueue = resolver.ServiceProvider.GetRequiredService<IStandardQueueService>();
 
         }
 
@@ -60,12 +59,12 @@ namespace AWS.BucketWatcher
         {
             var s3Event = evnt.Records?[0].S3;
 
-            context.Logger.LogLine("Logged :" + s3Event.Object.Key);
             if (s3Event == null)
             {
                 return null;
             }
-           
+
+            await _standardQueue.SendMessageAsync(s3Event.Object.Key);
 
             try
             {
@@ -85,11 +84,8 @@ namespace AWS.BucketWatcher
         // Register services with DI system
         private void ConfigureServices(IServiceCollection services)
         {
-            //TODO move to param store
-            string regionName = "us-east-1";
-
             services.AddTransient<ILogService, LogService>();
-            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<IStandardQueueService, StandardQueueService>();
         }
     }
 }

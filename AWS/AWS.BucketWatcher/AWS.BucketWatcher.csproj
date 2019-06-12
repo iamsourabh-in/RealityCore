@@ -11,4 +11,9 @@
     <PackageReference Include="AWSSDK.Core" Version="3.3.102.3" />
     <PackageReference Include="AWSSDK.SQS" Version="3.3.100.31" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AWS.Queue.Standard\AWS.Queue.Standard.csproj" />
+    <ProjectReference Include="..\Core\AWS.Lambda.CoreServices\AWS.Lambda.CoreServices.csproj" />
+    <ProjectReference Include="..\Core\AWS.Lambda.DI\AWS.Lambda.DI.csproj" />
+  </ItemGroup>
 </Project>

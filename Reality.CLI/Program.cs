@@ -33,8 +33,8 @@ namespace Reality.CLI
                 var putRequest1 = new PutObjectRequest
                 {
                     BucketName = bucketName,
-                    Key = "browser.ico",
-                    FilePath = @"E:\X\I\Browser.ico"
+                    Key = "Calculator.ico",
+                    FilePath = @"E:\X\I\Calculator.ico"
                 };
 
                 PutObjectResponse response1 = await client.PutObjectAsync(putRequest1);

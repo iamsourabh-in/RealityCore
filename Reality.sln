@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cognito", "Cognito", "{C7AF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.Cognito.Core", "AWS\Lambdas\Cognito\AWS.Cognito.Core\AWS.Cognito.Core.csproj", "{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.SignUp", "AWS\Lambdas\Cognito\Reality.SignUp\Reality.SignUp.csproj", "{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +142,7 @@ Global
 		{106EF023-6A98-457F-976A-00A8B5153617} = {FF60B4F3-85F4-4658-AF24-42F527AD2928}
 		{C7AF57FE-17FD-498B-9894-8D6701AFCADA} = {FF60B4F3-85F4-4658-AF24-42F527AD2928}
 		{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
+		{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {171D8879-438F-4DE1-BD73-AF9DD891F01C}

@@ -38,12 +38,12 @@ If already installed check if new version is available.
 
 Execute unit tests
 ```
-    cd "Cognito.SignUp/test/Cognito.SignUp.Tests"
+    cd "Reality.SignUp/test/Reality.SignUp.Tests"
     dotnet test
 ```
 
 Deploy function to AWS Lambda
 ```
-    cd "Cognito.SignUp/src/Cognito.SignUp"
+    cd "Reality.SignUp/src/Reality.SignUp"
     dotnet lambda deploy-function
 ```

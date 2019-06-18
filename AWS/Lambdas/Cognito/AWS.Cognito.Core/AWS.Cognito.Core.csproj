@@ -11,4 +11,8 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.102.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\AWS.Helper.Core\AWS.Helper.Core.csproj" />
+  </ItemGroup>
+
 </Project>

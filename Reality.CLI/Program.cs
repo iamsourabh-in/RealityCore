@@ -1,6 +1,7 @@
 ﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Reality.Cognito.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -16,8 +17,14 @@ namespace Reality.CLI
 
         public static void Main()
         {
-            client = new AmazonS3Client(bucketRegion);
-            ReadObjectDataAsync().Wait();
+
+
+            ConfirmSignUpRequest request = new ConfirmSignUpRequest();
+            Console.WriteLine(request.ToString<ConfirmSignUpRequest>());
+
+            Console.ReadLine();
+            //client = new AmazonS3Client(bucketRegion);
+            //ReadObjectDataAsync().Wait();
         }
 
         static async Task ReadObjectDataAsync()

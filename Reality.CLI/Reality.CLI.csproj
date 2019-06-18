@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AWS\AWS.EmailService\AWS.EmailService.csproj" />
+    <ProjectReference Include="..\AWS\Lambdas\Cognito\Reality.Cognito.Models\Reality.Cognito.Models.csproj" />
   </ItemGroup>
 
 </Project>

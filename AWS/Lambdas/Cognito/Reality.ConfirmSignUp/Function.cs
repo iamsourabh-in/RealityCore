@@ -1,14 +1,12 @@
-
 using Amazon.Lambda.Core;
 using AWS.Cognito.Core;
-using AWS.Cognito.Core.Models;
-using System.Net;
+using Reality.Cognito.Models;
 using System.Threading.Tasks;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
-namespace Reality.SignUp
+namespace Reality.ConfirmSignUp
 {
     public class Function
     {
@@ -19,11 +17,12 @@ namespace Reality.SignUp
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<HttpStatusCode> FunctionHandler(ApiSignUpRequest request, ILambdaContext context)
+        public async Task<string> FunctionHandler(ConfirmSignUpRequest input, ILambdaContext context)
         {
             CognitoHelper helper = new CognitoHelper();
-            await helper.AdminSignUpUser(request.username, "$ourabh@1", request.email, request.number);
-            return HttpStatusCode.OK;
+            await helper.VerifyAccessCode(input.username, input.tempCode);
+            return input.ToString<ConfirmSignUpRequest>();
+
         }
     }
 }

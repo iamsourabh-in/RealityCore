@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.AdminCreateUser", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.AdminConfirmSignUp", "AWS\Lambdas\Cognito\Reality.AdminConfirmSignUp\Reality.AdminConfirmSignUp.csproj", "{85D54D26-4EE6-411A-811B-77F53EE27E26}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.AdminConfirmUserWithTempPassword", "AWS\Lambdas\Cognito\Reality.AdminConfirmUserWithTempPassword\Reality.AdminConfirmUserWithTempPassword.csproj", "{E18C9877-4A7E-429C-A277-BB7029242764}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E18C9877-4A7E-429C-A277-BB7029242764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E18C9877-4A7E-429C-A277-BB7029242764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E18C9877-4A7E-429C-A277-BB7029242764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E18C9877-4A7E-429C-A277-BB7029242764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +198,7 @@ Global
 		{98AEA1A2-7791-4A64-AA53-A6B04FE475B7} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 		{06142A76-AA3D-472C-A882-D7676970583D} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 		{85D54D26-4EE6-411A-811B-77F53EE27E26} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
+		{E18C9877-4A7E-429C-A277-BB7029242764} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {171D8879-438F-4DE1-BD73-AF9DD891F01C}

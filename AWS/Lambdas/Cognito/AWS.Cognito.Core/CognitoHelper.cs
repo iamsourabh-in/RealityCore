@@ -160,7 +160,7 @@ namespace AWS.Cognito.Core
         /// </summary>
         /// <param name="loginRequest"></param>
         /// <returns></returns>
-        public async Task<bool> AdminConfirmUserWithNewPassword(Real.AdminConfirmUserWithNewPasswordRequest loginRequest)
+        public async Task<bool> AdminConfirmUserWithNewPassword(Real.AdminConfirmUserWithTempPasswordRequest loginRequest)
         {
             var client = new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
             var dictTypeAuthParam = new Dictionary<string, string> { { "USERNAME", loginRequest.Username }, { "PASSWORD", loginRequest.TempPassword } };
@@ -188,7 +188,7 @@ namespace AWS.Cognito.Core
                 Session = response.Session
             };
             var respondResponse = await client.RespondToAuthChallengeAsync(respondRequest);
-            return true;// CreateResponse(respondResponse);
+            return true;
 
         }
 

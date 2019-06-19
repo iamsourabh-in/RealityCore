@@ -13,8 +13,8 @@
     "function-runtime" : "dotnetcore2.1",
     "function-memory-size" : 256,
     "function-timeout"     : 30,
-    "function-handler"     : "Reality.AdminConfirmSignUp::Reality.AdminConfirmSignUp.Function::FunctionHandler",
-    "function-name"        : "RealityAdminConfirmSignUp",
+    "function-handler"     : "Reality.AdminConfirmUserWithTempPassword::Reality.AdminConfirmUserWithTempPassword.Function::FunctionHandler",
+    "function-name"        : "RealityAdminConfirmUserWithTempPassword",
     "function-role"        : "arn:aws:iam::272278775219:role/Lambda_Cognito",
     "tracing-mode"         : "PassThrough",
     "environment-variables" : ""

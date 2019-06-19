@@ -9,11 +9,11 @@
 
         public bool IsRequestValid()
         {
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(number))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(number))
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }

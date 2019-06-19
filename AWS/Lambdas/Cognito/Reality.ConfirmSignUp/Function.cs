@@ -17,11 +17,11 @@ namespace Reality.ConfirmSignUp
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<string> FunctionHandler(ConfirmSignUpRequest input, ILambdaContext context)
+        public async Task<string> FunctionHandler(ConfirmSignUpRequest request, ILambdaContext context)
         {
-            CognitoHelper helper = new CognitoHelper();
-            await helper.VerifyAccessCode(input.username, input.tempCode);
-            return input.ToString<ConfirmSignUpRequest>();
+            CognitoService helper = new CognitoService();
+            await helper.ConfirmSignUp(request);
+            return request.ToString<ConfirmSignUpRequest>();
 
         }
     }

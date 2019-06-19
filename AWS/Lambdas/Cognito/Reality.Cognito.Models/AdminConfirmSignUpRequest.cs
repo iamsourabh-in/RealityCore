@@ -2,12 +2,16 @@
 {
     public class AdminConfirmSignUpRequest : CognitoRequestBase
     {
-        public string username { get; set; }
-        public string tempCode { get; set; }
+        public string Username { get; set; }
+        public string TempCode { get; set; }
 
         public bool IsRequestValid()
         {
-            return true;
+            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(TempCode))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

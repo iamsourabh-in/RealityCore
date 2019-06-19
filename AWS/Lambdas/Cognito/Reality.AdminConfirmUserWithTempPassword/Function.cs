@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Amazon.Lambda.Core;
 using AWS.Cognito.Core;
 using Reality.Cognito.Models;
+using System;
+using System.Threading.Tasks;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -28,7 +25,7 @@ namespace Reality.AdminConfirmUserWithTempPassword
             {
                 if (request.IsRequestValid())
                 {
-                    CognitoHelper helper = new CognitoHelper();
+                    CognitoService helper = new CognitoService();
                     var response = await helper.AdminConfirmUserWithNewPassword(request);
                     return new AdminConfirmUserWithTempPasswordResponse() { StatusCode = 200, StatusMessage = "success", Payload = response };
                 }

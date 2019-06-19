@@ -19,8 +19,8 @@ namespace Reality.ResetPassword
         /// <returns></returns>
         public async Task<bool> FunctionHandler(ResetPasswordRequest request, ILambdaContext context)
         {
-            CognitoHelper helper = new CognitoHelper();
-            var response = await helper.ResetPassword(request.username);
+            CognitoService helper = new CognitoService();
+            var response = await helper.ResetPassword(request);
             return true;
         }
     }

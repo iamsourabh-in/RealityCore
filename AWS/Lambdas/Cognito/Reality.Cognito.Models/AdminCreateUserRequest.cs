@@ -2,14 +2,14 @@
 {
     public class AdminCreateUserRequest : CognitoRequestBase
     {
-        public string username { get; set; }
-        public string email { get; set; }
-        public string number { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
 
 
         public bool IsRequestValid()
         {
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(number))
+            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(PhoneNumber))
             {
                 return true;
             }

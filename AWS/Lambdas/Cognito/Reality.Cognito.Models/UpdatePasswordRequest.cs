@@ -1,6 +1,6 @@
 ﻿namespace Reality.Cognito.Models
 {
-    public class AdminConfirmUserWithTempPasswordRequest : CognitoRequestBase
+    public class UpdatePasswordRequest : CognitoRequestBase
     {
         public string Username { get; set; }
         public string TempPassword { get; set; }

@@ -27,8 +27,8 @@ namespace Reality.AdminConfirmSignUp
             {
                 if (request.IsRequestValid())
                 {
-                    CognitoHelper helper = new CognitoHelper();
-                    var response = await helper.AdminConfirmSignUpAsync(request.username);
+                    CognitoService helper = new CognitoService();
+                    var response = await helper.AdminConfirmSignUpAsync(request);
                     return new AdminConfirmSignUpResponse() { StatusCode = 200, StatusMessage = "success", Payload = response };
                 }
                 throw new Exception("Invalid Request");

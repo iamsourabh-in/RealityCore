@@ -21,8 +21,8 @@ namespace Reality.ResendTemporaryCode
         public async Task<bool> FunctionHandler(ResendTemporaryCodeRequest input, ILambdaContext context)
         {
             LambdaLogger.Log(input.ToString<ResendTemporaryCodeRequest>());
-            CognitoHelper helper = new CognitoHelper();
-            return await helper.ResendTemporaryPasssword(input.username);
+            CognitoService helper = new CognitoService();
+            return await helper.ResendTemporaryPasssword(input);
         }
     }
 }

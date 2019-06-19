@@ -20,7 +20,7 @@ namespace Reality.SignUp
         /// <returns></returns>
         public async Task<HttpStatusCode> FunctionHandler(ApiSignUpRequest request, ILambdaContext context)
         {
-
+            
             return HttpStatusCode.OK;
         }
     }

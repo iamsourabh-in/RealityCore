@@ -1,5 +1,8 @@
 using Amazon.Lambda.Core;
 using AWS.Cognito.Core;
+using AWS.Lambda.CoreServices;
+using AWS.Lambda.DI;
+using Microsoft.Extensions.DependencyInjection;
 using Reality.Cognito.Models;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +14,15 @@ namespace Reality.AdminCreateUser
 {
     public class Function : CognitoLambdaBase
     {
+        private readonly ILogService _loggingService;
+        private readonly ICognitoService _cognitoService;
+
+        public Function()
+        {
+            DependencyResolver resolver = new DependencyResolver(ConfigureServices);
+            _loggingService = resolver.ServiceProvider.GetRequiredService<ILogService>();
+            _cognitoService = resolver.ServiceProvider.GetRequiredService<ICognitoService>();
+        }
 
         /// <summary>
         /// Lambda to create user in coognito
@@ -24,9 +36,8 @@ namespace Reality.AdminCreateUser
             try
             {
                 if (request.IsRequestValid())
-                { 
-                    CognitoHelper helper = new CognitoHelper();
-                    var response = await helper.AdminCreateUserAsync(request);
+                {
+                    var response = await _cognitoService.AdminCreateUserAsync(request);
                     return new AdminCreateUserResponse() { StatusCode = 200, StatusMessage = "success", Payload = response };
                 }
                 throw new Exception("Invalid Request");
@@ -35,6 +46,12 @@ namespace Reality.AdminCreateUser
             {
                 return new AdminCreateUserResponse() { StatusCode = 400, StatusMessage = "error", Payload = ex.Message };
             }
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ICognitoService, CognitoService>();
         }
     }
 }

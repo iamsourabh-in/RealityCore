@@ -2,6 +2,6 @@
 {
     public class ResendTemporaryCodeRequest : CognitoRequestBase
     {
-        public string username { get; set; }
+        public string Username { get; set; }
     }
 }

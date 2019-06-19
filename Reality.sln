@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.QueueProcessor", "AWS\L
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cognito", "Cognito", "{C7AF57FE-17FD-498B-9894-8D6701AFCADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.Cognito.Core", "AWS\Lambdas\Cognito\AWS.Cognito.Core\AWS.Cognito.Core.csproj", "{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.Cognito.Core", "AWS\Lambdas\Cognito\AWS.Cognito.Core\AWS.Cognito.Core.csproj", "{2E1DAB5A-F322-41D4-9981-3CE1A32A8ABE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.SignUp", "AWS\Lambdas\Cognito\Reality.SignUp\Reality.SignUp.csproj", "{FBBD19FC-F5C3-49A3-AB80-BD887CE1CA9C}"
 EndProject
@@ -55,9 +55,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.ConfirmSignUp", "AW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.ResetPassword", "AWS\Lambdas\Cognito\Reality.ResetPassword\Reality.ResetPassword.csproj", "{ED085C69-43D5-45CB-8C14-6117394AE8FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reality.Cognito.Models", "AWS\Lambdas\Cognito\Reality.Cognito.Models\Reality.Cognito.Models.csproj", "{B78204A8-5BAD-4E59-86E8-09B880B39430}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.Cognito.Models", "AWS\Lambdas\Cognito\Reality.Cognito.Models\Reality.Cognito.Models.csproj", "{B78204A8-5BAD-4E59-86E8-09B880B39430}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.ResendTemporaryCode", "AWS\Lambdas\Cognito\Reality.ResendTemporaryCode\Reality.ResendTemporaryCode.csproj", "{98AEA1A2-7791-4A64-AA53-A6B04FE475B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.AdminCreateUser", "AWS\Lambdas\Cognito\Reality.AdminCreateUser\Reality.AdminCreateUser.csproj", "{06142A76-AA3D-472C-A882-D7676970583D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reality.AdminConfirmSignUp", "AWS\Lambdas\Cognito\Reality.AdminConfirmSignUp\Reality.AdminConfirmSignUp.csproj", "{85D54D26-4EE6-411A-811B-77F53EE27E26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +153,14 @@ Global
 		{98AEA1A2-7791-4A64-AA53-A6B04FE475B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98AEA1A2-7791-4A64-AA53-A6B04FE475B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98AEA1A2-7791-4A64-AA53-A6B04FE475B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06142A76-AA3D-472C-A882-D7676970583D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06142A76-AA3D-472C-A882-D7676970583D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06142A76-AA3D-472C-A882-D7676970583D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06142A76-AA3D-472C-A882-D7676970583D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D54D26-4EE6-411A-811B-77F53EE27E26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +190,8 @@ Global
 		{ED085C69-43D5-45CB-8C14-6117394AE8FF} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 		{B78204A8-5BAD-4E59-86E8-09B880B39430} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 		{98AEA1A2-7791-4A64-AA53-A6B04FE475B7} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
+		{06142A76-AA3D-472C-A882-D7676970583D} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
+		{85D54D26-4EE6-411A-811B-77F53EE27E26} = {C7AF57FE-17FD-498B-9894-8D6701AFCADA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {171D8879-438F-4DE1-BD73-AF9DD891F01C}

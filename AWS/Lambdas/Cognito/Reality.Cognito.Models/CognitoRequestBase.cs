@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Reality.Cognito.Models
 {
-    public class CognitoBase
+    public class CognitoRequestBase
     {
 
         public string ToString<T>()

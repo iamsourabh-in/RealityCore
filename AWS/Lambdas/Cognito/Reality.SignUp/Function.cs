@@ -1,6 +1,5 @@
 
 using Amazon.Lambda.Core;
-using AWS.Cognito.Core;
 using AWS.Cognito.Core.Models;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,8 +20,7 @@ namespace Reality.SignUp
         /// <returns></returns>
         public async Task<HttpStatusCode> FunctionHandler(ApiSignUpRequest request, ILambdaContext context)
         {
-            CognitoHelper helper = new CognitoHelper();
-            await helper.AdminSignUpUser(request.username, "$ourabh@1", request.email, request.number);
+
             return HttpStatusCode.OK;
         }
     }

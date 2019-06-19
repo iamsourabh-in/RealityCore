@@ -3,6 +3,7 @@ using Amazon.CognitoIdentity;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
+using Amazon.Lambda.Core;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -11,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AWSModels = Amazon.CognitoIdentityProvider.Model;
+using Real = Reality.Cognito.Models;
 
 namespace AWS.Cognito.Core
 {
@@ -33,39 +36,115 @@ namespace AWS.Cognito.Core
             return string.Format("https://{0}.auth.{1}.amazoncognito.com/login?response_type=code&client_id={2}&redirect_uri=https://sid343.reinvent-workshop.com/", CUSTOM_DOMAIN, REGION, CLIENTAPP_ID);
         }
 
-        public async Task<bool> AdminSignUpUser(string username, string password, string email, string phonenumber, bool isAdmin = true)
+        #region Admin Actions (Create and Confirm User)
+
+        /// <summary>
+        /// Used to Create User in cognito. other attributes can be provided but are not mandatory.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
+        public async Task<bool> AdminCreateUserAsync(Real.AdminCreateUserRequest request)
         {
-            AmazonCognitoIdentityProviderClient provider =
-                   new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
+            AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
 
-            //SignUpRequest signUpRequest = new SignUpRequest();
-            //signUpRequest.Username = username;
-            //signUpRequest.Password = password;
-
-
-            //AttributeType attributeType = new AttributeType();
-            //attributeType.Name = "phone_number";
-            //attributeType.Value = phonenumber;
-            //signUpRequest.UserAttributes.Add(attributeType);
-
-            //AttributeType attributeType1 = new AttributeType();
-            //attributeType1.Name = "email";
-            //attributeType1.Value = email;
-            //signUpRequest.UserAttributes.Add(attributeType1);
-
-            AdminCreateUserRequest userRequest = new AdminCreateUserRequest();
-            userRequest.Username = username;
+            AWSModels.AdminCreateUserRequest userRequest = new AWSModels.AdminCreateUserRequest();
+            userRequest.Username = request.username;
             userRequest.UserPoolId = POOL_ID;
             userRequest.DesiredDeliveryMediums = new List<string>() { "EMAIL" };
             userRequest.TemporaryPassword = PasswordGenerator.GeneratePassword(true, true, true, true, false, 6);
-            userRequest.UserAttributes.Add(new AttributeType { Name = "email", Value = email });
-            userRequest.UserAttributes.Add(new AttributeType { Name = "phone_number", Value = phonenumber });
+            userRequest.UserAttributes.Add(new AttributeType { Name = "email", Value = request.email });
+            userRequest.UserAttributes.Add(new AttributeType { Name = "phone_number", Value = request.number });
 
             try
             {
-                //  SignUpResponse result = await provider.SignUpAsync(signUpRequest);
                 AdminCreateUserResponse response = await provider.AdminCreateUserAsync(userRequest);
+            }
+            catch (CodeDeliveryFailureException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.CodeDeliveryFailureException, ex.StackTrace, ex.Message);
+            }
+            catch (InternalErrorException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.InternalErrorException, ex.StackTrace, ex.Message);
+            }
+            catch (InvalidLambdaResponseException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.InvalidLambdaResponseException, ex.StackTrace, ex.Message);
+            }
+            catch (InvalidParameterException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.InvalidParameterException, ex.StackTrace, ex.Message);
+            }
+            catch (InvalidUserPoolConfigurationException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.InvalidUserPoolConfigurationException, ex.StackTrace, ex.Message);
+            }
+            catch (PasswordResetRequiredException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.PasswordResetRequiredException, ex.StackTrace, ex.Message);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.ResourceNotFoundException, ex.StackTrace, ex.Message);
+            }
+            catch (TooManyRequestsException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.TooManyRequestsException, ex.StackTrace, ex.Message);
+            }
+            catch (UnexpectedLambdaException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UnexpectedLambdaException, ex.StackTrace, ex.Message);
+            }
+            catch (UserLambdaValidationException ex)
+            {
+                if (ex.Message == "User account already exists")
+                {
+                    ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UserNameExistsException, ex.StackTrace, ex.Message);
 
+                }
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UserLambdaValidationException, ex.StackTrace, ex.Message);
+            }
+            catch (UserNotConfirmedException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UserNotConfirmedException, ex.StackTrace, ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UserNotFoundException, ex.StackTrace, ex.Message);
+            }
+            catch (AmazonCognitoIdentityProviderException ex)
+            {
+                if (ex.Message == "User account already exists")
+                    ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.UserNameExistsException, ex.StackTrace, ex.Message);
+
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.AmazonCognitoIdentityProviderException, ex.StackTrace, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                ThrowCustomException(CognitoActionType.AdminCreateUser, ExceptionConstants.ErrorException, ex.StackTrace, ex.Message);
+            }
+            return true;
+
+        }
+
+        /// <summary>
+        /// Confirms user registration as an admin without using a confirmation code. Works on any user.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public async Task<bool> AdminConfirmSignUpAsync(string username)
+        {
+            AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
+
+            AdminConfirmSignUpRequest userRequest = new AdminConfirmSignUpRequest();
+            userRequest.Username = username;
+            userRequest.UserPoolId = POOL_ID;
+
+            try
+            {
+                AdminConfirmSignUpResponse response = await provider.AdminConfirmSignUpAsync(userRequest);
             }
             catch (Exception e)
             {
@@ -75,75 +154,50 @@ namespace AWS.Cognito.Core
             return true;
 
         }
-        public async Task<bool> VerifyAccessCode(string username, string code)
+
+        /// <summary>
+        /// Confirms user registration as an admin with using a confirmation code.
+        /// </summary>
+        /// <param name="loginRequest"></param>
+        /// <returns></returns>
+        public async Task<bool> AdminConfirmUserWithNewPassword(Real.AdminConfirmUserWithNewPasswordRequest loginRequest)
         {
-            AmazonCognitoIdentityProviderClient provider =
-                   new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
-            ConfirmSignUpRequest confirmSignUpRequest = new ConfirmSignUpRequest();
-            confirmSignUpRequest.Username = username;
-            confirmSignUpRequest.ConfirmationCode = code;
-            confirmSignUpRequest.ClientId = CLIENTAPP_ID;
-            try
+            var client = new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
+            var dictTypeAuthParam = new Dictionary<string, string> { { "USERNAME", loginRequest.Username }, { "PASSWORD", loginRequest.TempPassword } };
+
+            AdminInitiateAuthRequest req = new AdminInitiateAuthRequest()
             {
-                ConfirmSignUpResponse confirmSignUpResult = await provider.ConfirmSignUpAsync(confirmSignUpRequest);
-                Console.WriteLine(confirmSignUpResult.ToString());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return false;
-            }
-
-            return true;
-
-        }
-        public async Task<CognitoUser> ResetPassword(string username)
-        {
-            AmazonCognitoIdentityProviderClient provider =
-                   new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
-
-            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
-
-            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
-            await user.ForgotPasswordAsync();
-            return user;
-        }
-        public async Task<CognitoUser> UpdatePassword(string username, string code, string newpassword)
-        {
-            AmazonCognitoIdentityProviderClient provider =
-                   new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
-
-            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
-
-            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
-            await user.ConfirmForgotPasswordAsync(code, newpassword);
-            return user;
-        }
-        public async Task<CognitoUser> ValidateUser(string username, string password)
-        {
-            AmazonCognitoIdentityProviderClient provider =
-                    new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
-
-            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
-
-            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
-            InitiateSrpAuthRequest authRequest = new InitiateSrpAuthRequest()
-            {
-                Password = password
+                AuthFlow = new AuthFlowType(AuthFlowType.ADMIN_NO_SRP_AUTH),
+                ClientId = CLIENTAPP_ID,
+                UserPoolId = POOL_ID,
+                AuthParameters = dictTypeAuthParam
             };
 
+            var response = await client.AdminInitiateAuthAsync(req);
+            var dictTypeChallangeResponse = new Dictionary<string, string>
+            {
+                {"USERNAME",  loginRequest .Username},
+                {"NEW_PASSWORD", loginRequest.NewPassword}
+            };
 
-            AuthFlowResponse authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
-            if (authResponse.AuthenticationResult != null)
+            var respondRequest = new RespondToAuthChallengeRequest()
             {
-                return user;
-            }
-            else
-            {
-                return null;
-            }
+                ChallengeName = new ChallengeNameType(ChallengeNameType.NEW_PASSWORD_REQUIRED),
+                ClientId = CLIENTAPP_ID,
+                ChallengeResponses = dictTypeChallangeResponse,
+                Session = response.Session
+            };
+            var respondResponse = await client.RespondToAuthChallengeAsync(respondRequest);
+            return true;// CreateResponse(respondResponse);
+
         }
 
+
+        /// <summary>
+        /// This send the temporary code again to the admin created user which is now not activate
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<bool> ResendTemporaryPasssword(string username)
         {
             AmazonCognitoIdentityProviderClient provider =
@@ -170,30 +224,128 @@ namespace AWS.Cognito.Core
         }
 
 
-        //Confirms user registration as an admin without using a confirmation code. Works on any user.
+        #endregion
 
-        public async Task<bool> AdminConfirmSignUp(string username)
+        #region User Actions (SignUp,Login,Reset/Update Password)
+
+        /// <summary>
+        /// Use to Register User
+        /// </summary>
+        /// <param name="signUpRequest"></param>
+        /// <returns></returns>
+        public async Task<bool> UserSignUp(Real.UserSignUpRequest signUpRequest)
         {
-            AmazonCognitoIdentityProviderClient provider =
-                    new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(REGION));
+            AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
 
-            AdminConfirmSignUpRequest userRequest = new AdminConfirmSignUpRequest();
-            userRequest.Username = username;
-            userRequest.UserPoolId = POOL_ID;
+            SignUpRequest request = new SignUpRequest();
+            request.Username = signUpRequest.username;
+            request.Password = signUpRequest.password;
+            request.UserAttributes.Add(new AttributeType { Name = "email", Value = signUpRequest.email });
+            request.UserAttributes.Add(new AttributeType { Name = "phone_number", Value = signUpRequest.number });
+            await provider.SignUpAsync(request);
 
+            return true;
+        }
+
+
+        /// <summary>
+        /// Verify the access code to confirm signup when force password change is not imposed.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public async Task<bool> VerifyAccessCode(string username, string code)
+        {
+            AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
+            ConfirmSignUpRequest confirmSignUpRequest = new ConfirmSignUpRequest();
+            confirmSignUpRequest.Username = username;
+            confirmSignUpRequest.ConfirmationCode = code;
+            confirmSignUpRequest.ClientId = CLIENTAPP_ID;
             try
             {
-                AdminConfirmSignUpResponse response = await provider.AdminConfirmSignUpAsync(userRequest);
+                ConfirmSignUpResponse confirmSignUpResult = await provider.ConfirmSignUpAsync(confirmSignUpRequest);
+                Console.WriteLine(confirmSignUpResult.ToString());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                return false;
+                ThrowCustomException(CognitoActionType.UserConfirmSignUp, ExceptionConstants.InternalServerErrorException, ex.StackTrace, ex.Message);
             }
+
             return true;
 
         }
 
+        /// <summary>
+        ///  Allow user to reset his/her password by sending a reset code
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public async Task<CognitoUser> ResetPassword(string username)
+        {
+            AmazonCognitoIdentityProviderClient provider =
+                   new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
+
+            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
+
+            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
+            await user.ForgotPasswordAsync();
+            return user;
+        }
+
+        /// <summary>
+        /// Update Password
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="code"></param>
+        /// <param name="newpassword"></param>
+        /// <returns></returns>
+        public async Task<CognitoUser> UpdatePassword(string username, string code, string newpassword)
+        {
+            AmazonCognitoIdentityProviderClient provider =
+                   new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
+
+            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
+
+            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
+            await user.ConfirmForgotPasswordAsync(code, newpassword);
+            return user;
+        }
+
+        /// <summary>
+        /// Validate user in Cognito
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public async Task<CognitoUser> ValidateUser(string username, string password)
+        {
+            AmazonCognitoIdentityProviderClient provider =
+                    new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
+
+            CognitoUserPool userPool = new CognitoUserPool(this.POOL_ID, this.CLIENTAPP_ID, provider);
+
+            CognitoUser user = new CognitoUser(username, this.CLIENTAPP_ID, userPool, provider);
+            InitiateSrpAuthRequest authRequest = new InitiateSrpAuthRequest()
+            {
+                Password = password
+            };
+
+
+            AuthFlowResponse authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
+            if (authResponse.AuthenticationResult != null)
+            {
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        #endregion
+
+        #region Class Helpers
         public async Task<string> GetS3BucketsAsync(CognitoUser user)
         {
             CognitoAWSCredentials credentials =
@@ -222,5 +374,24 @@ namespace AWS.Cognito.Core
             Console.WriteLine(bucketlist.ToString());
             return bucketlist.ToString();
         }
+
+
+        /// <summary>
+        /// Log and throw a custom Exception
+        /// </summary>
+        /// <param name="actionType"></param>
+        /// <param name="customException"></param>
+        /// <param name="stackTrace"></param>
+        /// <param name="message"></param>
+        /// <param name="username"></param>
+        /// <param name="sourceIp"></param>
+        public void ThrowCustomException(CognitoActionType actionType, string customException, string stackTrace, string message, string username = "", string sourceIp = "")
+        {
+            var UnixCurrentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            LambdaLogger.Log($" Time: { UnixCurrentTimeStamp } | Action Type: {actionType.ToString()}, Exception: {customException}, Message: {message}, User: {username}, IP: {sourceIp} ");
+            LambdaLogger.Log($" Time: { UnixCurrentTimeStamp } | StackTrace: {stackTrace}");
+            throw new Exception(customException);
+        }
+        #endregion
     }
 }

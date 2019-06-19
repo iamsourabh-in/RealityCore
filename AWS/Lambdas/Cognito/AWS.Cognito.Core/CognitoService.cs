@@ -182,14 +182,16 @@ namespace AWS.Cognito.Core
                 {"NEW_PASSWORD", loginRequest.NewPassword}
             };
 
-            var respondRequest = new RespondToAuthChallengeRequest()
+            var respondRequest = new AdminRespondToAuthChallengeRequest()
             {
                 ChallengeName = new ChallengeNameType(ChallengeNameType.NEW_PASSWORD_REQUIRED),
                 ClientId = CLIENTAPP_ID,
                 ChallengeResponses = dictTypeChallangeResponse,
-                Session = response.Session
+                Session = response.Session,
+                UserPoolId = POOL_ID
+
             };
-            var respondResponse = await client.RespondToAuthChallengeAsync(respondRequest);
+            var respondResponse = await client.AdminRespondToAuthChallengeAsync(respondRequest);
             return true;
 
         }
